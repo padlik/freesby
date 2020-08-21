@@ -6,7 +6,7 @@ ENV USERS_FILE=/users.txt
 RUN apk add --update apache2-utils \
     && rm -rf /var/cache!/apk/*
 
-ADD makehtpasswd.sh /makehtpasswd.sh
+ADD makehtpasswd.sh /usr/local/bin/makehtpasswd.sh
 
-CMD [ "makehtpasswd.sh" ]
+CMD [ "/usr/local/bin/makehtpasswd.sh" ]
 
