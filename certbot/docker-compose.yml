@@ -1,0 +1,27 @@
+version: '2'
+services:
+
+  certbot:
+    build: .
+    volumes:
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - html:/usr/share/nginx/html
+    env_file:
+      - ../shared.env
+
+  acme:
+    image: nginx:stable-alpine
+    volumes:
+      - ./etc/letsencrypt:/etc/letsencrypt
+      - ./templates:/etc/nginx/templates
+      - html:/usr/share/nginx/html
+    env_file:
+      - ../shared.env
+    ports:
+      - "80:80"
+    expose:
+      - "80"
+    privileged: true
+
+volumes:
+  html:

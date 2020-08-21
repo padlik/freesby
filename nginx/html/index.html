@@ -1,0 +1,92 @@
+<h1 id="docker-ocserv">docker-ocserv</h1>
+<p>docker-ocserv is an OpenConnect VPN Server boxed in a Docker image built by <a href="mailto:tommy@gen-new.com">Tommy Lau</a>.</p>
+<h2 id="update-on-aug-31-2017">Update on Aug 31, 2017</h2>
+<p>Update to version 0.11.8 and use Alpine 3.6 as base image</p>
+<h2 id="update-on-july-202016">Update on July 20,2016</h2>
+<p>You can login with two group (<code>Route</code>/<code>ALL</code>) from now on. <code>Route</code> group means you can access China Mainland website directly and other connection will be protected by OpenConnect VPN <code>All</code> group means all of connection will be protected by OpenConnect VPN</p>
+<h2 id="update-on-july-16-2016">Update on July 16, 2016</h2>
+<p>Thanks for <span class="citation" data-cites="sempr">[@sempr]</span>(https://github.com/sempr)’s contribution and suggestion, from now on, the <a href="https://hub.docker.com/_/alpine/">Alpine Linux</a> will be used as the base image. The docker image size has been dramatically reduced from around 150MB to only 20MB.</p>
+<blockquote>
+<p>NOTICE: You have to use Docker version 1.9.0 or later to support Alpine, DO NOT UPDATE the image if your Docker version is older than 1.9.0</p>
+</blockquote>
+<h2 id="what-is-openconnect-server">What is OpenConnect Server?</h2>
+<p><a href="http://www.infradead.org/ocserv/">OpenConnect server (ocserv)</a> is an SSL VPN server. It implements the OpenConnect SSL VPN protocol, and has also (currently experimental) compatibility with clients using the <a href="http://www.cisco.com/c/en/us/support/security/anyconnect-vpn-client/tsd-products-support-series-home.html">AnyConnect SSL VPN</a> protocol.</p>
+<h2 id="how-to-use-this-image">How to use this image</h2>
+<p>Get the docker image by running the following commands:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" title="1"><span class="ex">docker</span> pull tommylau/ocserv</a></code></pre></div>
+<p>Start an ocserv instance:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -d tommylau/ocserv</a></code></pre></div>
+<p>This will start an instance with the a test user named <code>test</code> and password is also <code>test</code>.</p>
+<h3 id="environment-variables">Environment Variables</h3>
+<p>All the variables to this image is optional, which means you don’t have to type in any environment variables, and you can have a OpenConnect Server out of the box! However, if you like to config the ocserv the way you like it, here’s what you wanna know.</p>
+<p><code>CA_CN</code>, this is the common name used to generate the CA(Certificate Authority).</p>
+<p><code>CA_ORG</code>, this is the organization name used to generate the CA.</p>
+<p><code>CA_DAYS</code>, this is the expiration days used to generate the CA.</p>
+<p><code>SRV_CN</code>, this is the common name used to generate the server certification.</p>
+<p><code>SRV_ORG</code>, this is the organization name used to generate the server certification.</p>
+<p><code>SRV_DAYS</code>, this is the expiration days used to generate the server certification.</p>
+<p><code>NO_TEST_USER</code>, while this variable is set to not empty, the <code>test</code> user will not be created. You have to create your own user with password. The default value is to create <code>test</code> user with password <code>test</code>.</p>
+<p>The default values of the above environment variables:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Variable</th>
+<th style="text-align: center;">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>CA_CN</strong></td>
+<td style="text-align: center;">VPN CA</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>CA_ORG</strong></td>
+<td style="text-align: center;">Big Corp</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>CA_DAYS</strong></td>
+<td style="text-align: center;">9999</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>SRV_CN</strong></td>
+<td style="text-align: center;">www.example.com</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>SRV_ORG</strong></td>
+<td style="text-align: center;">My Company</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>SRV_DAYS</strong></td>
+<td style="text-align: center;">9999</td>
+</tr>
+</tbody>
+</table>
+<h3 id="running-examples">Running examples</h3>
+<p>Start an instance out of the box with username <code>test</code> and password <code>test</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -d tommylau/ocserv</a></code></pre></div>
+<p>Start an instance with server name <code>my.test.com</code>, <code>My Test</code> and <code>365</code> days</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb4-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -e SRV_CN=my.test.com -e SRV_ORG=<span class="st">&quot;My Test&quot;</span> -e SRV_DAYS=365 -d tommylau/ocserv</a></code></pre></div>
+<p>Start an instance with CA name <code>My CA</code>, <code>My Corp</code> and <code>3650</code> days</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb5-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -e CA_CN=<span class="st">&quot;My CA&quot;</span> -e CA_ORG=<span class="st">&quot;My Corp&quot;</span> -e CA_DAYS=3650 -d tommylau/ocserv</a></code></pre></div>
+<p>A totally customized instance with both CA and server certification</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -e CA_CN=<span class="st">&quot;My CA&quot;</span> -e CA_ORG=<span class="st">&quot;My Corp&quot;</span> -e CA_DAYS=3650 -e SRV_CN=my.test.com -e SRV_ORG=<span class="st">&quot;My Test&quot;</span> -e SRV_DAYS=365 -d tommylau/ocserv</a></code></pre></div>
+<p>Start an instance as above but without test user</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="ex">docker</span> run --name ocserv --privileged -p 443:443 -p 443:443/udp -e CA_CN=<span class="st">&quot;My CA&quot;</span> -e CA_ORG=<span class="st">&quot;My Corp&quot;</span> -e CA_DAYS=3650 -e SRV_CN=my.test.com -e SRV_ORG=<span class="st">&quot;My Test&quot;</span> -e SRV_DAYS=365 -e NO_TEST_USER=1 -v /some/path/to/ocpasswd:/etc/ocserv/ocpasswd -d tommylau/ocserv</a></code></pre></div>
+<p><strong>WARNING:</strong> The ocserv requires the ocpasswd file to start, if <code>NO_TEST_USER=1</code> is provided, there will be no ocpasswd created, which will stop the container immediately after start it. You must specific a ocpasswd file pointed to <code>/etc/ocserv/ocpasswd</code> by using the volume argument <code>-v</code> by docker as demonstrated above.</p>
+<h3 id="user-operations">User operations</h3>
+<p>All the users opertaions happened while the container is running. If you used a different container name other than <code>ocserv</code>, then you have to change the container name accordingly.</p>
+<h4 id="add-user">Add user</h4>
+<p>If say, you want to create a user named <code>tommy</code>, type the following command</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="ex">docker</span> exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -g <span class="st">&quot;Route,All&quot;</span> tommy</a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="ex">Enter</span> password:</a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="ex">Re-enter</span> password:</a></code></pre></div>
+<p>When prompt for password, type the password twice, then you will have the user with the password you want.</p>
+<blockquote>
+<p><code>-g "Route,ALL"</code> means add user <code>tommy</code> to group <code>Route</code> and group <code>All</code></p>
+</blockquote>
+<h4 id="delete-user">Delete user</h4>
+<p>Delete user is similar to add user, just add another argument <code>-d</code> to the command line</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" title="1"><span class="ex">docker</span> exec -ti ocserv ocpasswd -c /etc/ocserv/ocpasswd -d test</a></code></pre></div>
+<p>The above command will delete the default user <code>test</code>, if you start the instance without using environment variable <code>NO_TEST_USER</code>.</p>
+<h4 id="change-password">Change password</h4>
+<p>Change password is exactly the same command as add user, please refer to the command mentioned above.</p>
