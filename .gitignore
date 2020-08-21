@@ -1,2 +1,5 @@
 #environ
 *.env
+
+#working directories
+certbot/etc
