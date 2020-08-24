@@ -2,6 +2,7 @@
 set -e
 
 touch ${PASSWD_FILE}
+echo > ${PASSWD_FILE}
 
 if [ -r ${USERS_FILE} ]; then
         while read username userpass 
