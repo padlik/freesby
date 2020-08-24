@@ -1,6 +1,7 @@
 FROM alpine:3.7
 
 ENV OC_VERSION=1.1.0
+ENV USERS_FILE=/etc/ocserv/users.txt
 
 RUN buildDeps=" \
 		curl \
@@ -62,7 +63,6 @@ WORKDIR /etc/ocserv
 
 COPY All /etc/ocserv/config-per-group/All
 COPY cn-no-route.txt /etc/ocserv/config-per-group/Route
-COPY users.txt /etc/ocserv/users.txt
 
 COPY docker-entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

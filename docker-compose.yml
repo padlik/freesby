@@ -25,4 +25,17 @@ services:
     environment:
       - USERS_FILE=/users.txt
 
+  knocker:
+    build:
+      context: ./knocker
+    privileged: true
+
+  openconnect:
+    build:
+      context: ./openconnect
+    ports:
+  | | - "4443:443"
+    privileged: true
+    volumes:
+      - ./users.txt:/etc/ocserv/users.txt
 

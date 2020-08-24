@@ -1,6 +1,7 @@
 FROM debian:buster
 
 ENV VERSION v4.34-9745-rtm-2020.04.05
+ENV USER_LIST=/usr/local/vpnserver/users.txt
 
 WORKDIR /usr/local/vpnserver
 
@@ -18,7 +19,6 @@ ENV HUBNAME basehub
 ENV HUBPASS pass4hub
 
 
-ADD users.txt /usr/local/vpnserver/users.txt
 ADD entrypoint.sh /usr/local/bin/entrypoint.sh
 
 EXPOSE 443

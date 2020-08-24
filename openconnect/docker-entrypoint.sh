@@ -53,12 +53,12 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 	certtool --generate-certificate --load-privkey server-key.pem --load-ca-certificate ca.pem --load-ca-privkey ca-key.pem --template server.tmpl --outfile server-cert.pem
 
 	# Create users if required
-	if [ -r /etc/ocserv/users.txt ] && [ ! -f /etc/ocserv/ocpasswd ]; then
+	if [ -r ${USERS_FILE} ] && [ ! -f /etc/ocserv/ocpasswd ]; then
 		for read username userpass
 		do
 			echo "Adding user ${username}"
 			echo "$userpasswd" | ocpasswd -c /etc/ocserv/ocpasswd -g All,Route ${username}
-		done < /etc/ocserv/users.txt
+		done < ${USERS_FILE}
 	fi
 fi
 
