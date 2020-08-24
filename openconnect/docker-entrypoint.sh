@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-cert.pem ]; then
 	# Check environment variables
@@ -54,7 +54,7 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 
 	# Create users if required
 	if [ -r ${USERS_FILE} ] && [ ! -f /etc/ocserv/ocpasswd ]; then
-		for read username userpass
+		while read username userpass
 		do
 			echo "Adding user ${username}"
 			echo "$userpasswd" | ocpasswd -c /etc/ocserv/ocpasswd -g All,Route ${username}

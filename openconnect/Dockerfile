@@ -18,7 +18,7 @@ RUN buildDeps=" \
 		xz \
 	"; \
 	set -x \
-	&& apk add --update lz4-dev libseccomp-dev \
+	&& apk add --update lz4-dev libseccomp-dev bash \
 	&& apk add --update --virtual .build-deps $buildDeps \
 	&& curl -SL "ftp://ftp.infradead.org/pub/ocserv/ocserv-$OC_VERSION.tar.xz" -o ocserv.tar.xz \
 	&& mkdir -p /usr/src/ocserv \
