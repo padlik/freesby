@@ -5,6 +5,8 @@ RUN go install github.com/uprt/labean
 
 FROM debian:buster
 
+
+ENV LABEAN_CONF=/etc/labean.conf
 ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y locales iptables busybox-syslogd dumb-init --no-install-recommends \
     && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
@@ -12,8 +14,7 @@ RUN apt-get update && apt-get install -y locales iptables busybox-syslogd dumb-i
     && /usr/sbin/update-locale LANG=en_US.UTF-8 \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false
 COPY --from=gobuilder /go/bin/labean /usr/sbin/labean
-COPY labean.conf /etc/labean.conf
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 EXPOSE 8080
-ENTRYPOINT ["/usr/bin/dumb-init", "--"]
-CMD ["bash", "-c", "syslogd -O /dev/stdout && exec labean /etc/labean.conf"]
+CMD [ "/usr/local/bin/entrypoint.sh" ]
 

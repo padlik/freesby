@@ -29,6 +29,8 @@ services:
     build:
       context: ./knocker
     privileged: true
+    volumes:
+      - ./knocker/labean.conf:/etc/labean.conf
     ports:
       - "8080:8080"
     expose:
