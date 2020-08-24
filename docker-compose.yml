@@ -34,7 +34,7 @@ services:
     build:
       context: ./openconnect
     ports:
-  | | - "4443:443"
+      - "4443:443"
     privileged: true
     volumes:
       - ./users.txt:/etc/ocserv/users.txt
