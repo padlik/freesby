@@ -57,7 +57,7 @@ if [ ! -f /etc/ocserv/certs/server-key.pem ] || [ ! -f /etc/ocserv/certs/server-
 		while read username userpass
 		do
 			echo "Adding user ${username}"
-			echo "$userpasswd" | ocpasswd -c /etc/ocserv/ocpasswd -g All,Route ${username}
+			echo "$userpass" | ocpasswd -c /etc/ocserv/ocpasswd -g All,Route ${username}
 		done < ${USERS_FILE}
 	fi
 fi
