@@ -11,7 +11,7 @@ services:
     env_file:
       - ./shared.env
     privileged: true
-    network: host 
+    network_mode: host 
 
   htpass:
     build:
@@ -26,9 +26,10 @@ services:
     build:
       context: ./knocker
     privileged: true
+    ports: 
+      - "8080:8080"
     volumes:
       - ./knocker/labean.conf:/etc/labean.conf
-    network: host
 
   openconnect:
     build:
