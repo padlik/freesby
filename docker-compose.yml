@@ -10,11 +10,8 @@ services:
       - ./nginx/.htpasswd:/var/www/.htpasswd
     env_file:
       - ./shared.env
-    ports:
-      - "443:443"
-    expose:
-      - "443"
     privileged: true
+    network: host 
 
   htpass:
     build:
@@ -31,10 +28,7 @@ services:
     privileged: true
     volumes:
       - ./knocker/labean.conf:/etc/labean.conf
-    ports:
-      - "8080:8080"
-    expose:
-      - "8080"
+    network: host
 
   openconnect:
     build:
