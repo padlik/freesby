@@ -38,4 +38,8 @@ services:
     privileged: true
     volumes:
       - ./users.txt:/etc/ocserv/users.txt
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
+    env_file:
+      - ./shared.env
+
 
