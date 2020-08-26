@@ -1,26 +1,27 @@
 #!/bin/bash
+set -e
 
 
-NGINX_HOST=${NGINX_HOST:-example.com} 
+NGINX_HOST=${NGINX_HOST:-example.com}
 
 if [ ! -d  /etc/letsencrypt/live/${NGINX_HOST} ]; then
-	mkdir -p /etc/letsencrypt/live/${NGINX_HOST}
-	cp /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/letsencrypt/live/${NGINX_HOST}
-	cp /etc/ssl/certs/ssl-cert-snakeoil.key /etc/letsencrypt/live/${NGINX_HOST}
+        mkdir -p /etc/letsencrypt/live/${NGINX_HOST}
+        cp /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/letsencrypt/live/${NGINX_HOST}
+        cp /etc/ssl/certs/ssl-cert-snakeoil.key /etc/letsencrypt/live/${NGINX_HOST}
 fi
 
 
 # Create users if required
 if [ -r ${USERS_FILE} ] && [ ! -f /etc/ocserv/ocpasswd ]; then
-	while read username userpass
-	do
-		echo "Adding user ${username}"
-		echo "$userpass" | ocpasswd -c /etc/ocserv/ocpasswd ${username}
-	done < ${USERS_FILE}
+        while read username userpass
+        do
+                echo "Adding user ${username}"
+                echo "$userpass" | ocpasswd -c /etc/ocserv/ocpasswd ${username}
+        done < ${USERS_FILE}
 fi
 
-echo "Creating configuration file" 
-envsubst < /etc/ocserv.conf.template > /etc/ocserv.conf
+echo "Creating configuration file"
+envsubst < /etc/ocserv/ocserv.conf.template > /etc/ocserv/ocserv.conf
 
 # Open ipv4 ip forward
 sysctl -w net.ipv4.ip_forward=1
