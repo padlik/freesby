@@ -42,4 +42,13 @@ services:
     env_file:
       - ./shared.env
 
-
+  sstp:
+    build:
+      context: ./sstp
+    ports:
+      - "3443:443"
+    privileged: true
+    volumes:
+      - ./users.txt:/usr/local/vpnserver/users.txt
+    env_file:
+      - ./shared.env
