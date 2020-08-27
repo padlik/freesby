@@ -10,6 +10,9 @@ stop_ok() {
 /usr/local/vpnserver/vpnserver start
 
 sleep 3s
+#disable DOS protection which is useless 
+sed -i 's/\(\s*bool\s*DisableDos\s\).*$/\1true/' /usr/local/vpnserver/vpn_server.config
+sed -i 's/\(\s*bool\s*DisableDosProction\s\).*$/\1true/' /usr/local/vpnserver/vpn_server.config
 
 /usr/local/vpnserver/vpncmd /SERVER localhost /CMD HubCreate $HUBNAME /PASSWORD:$HUBPASS
 
