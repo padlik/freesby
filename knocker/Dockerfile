@@ -6,7 +6,7 @@ RUN git clone --depth=1 https://github.com/uprt/labean
 RUN go install github.com/uprt/labean
 
 FROM alpine:latest
-ENV LABEAN_CONF=/etc/labean.conf
+ENV LABEAN_CONF=/etc/labean/labean.conf
 RUN apk --update add  iptables bash \
     && rm -rf /var/cache!/apk/*
 COPY --from=gobuilder /go/bin/labean /usr/sbin/labean
