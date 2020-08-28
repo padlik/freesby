@@ -1,0 +1,55 @@
+version: '2'
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/html:/var/www/html
+      - ./nginx/.htpasswd:/var/www/.htpasswd
+    env_file:
+      - ./shared.env
+    privileged: true
+    network_mode: host 
+
+  htpass:
+    build:
+      context: ./nginx
+    volumes:
+      - ./nginx/.htpasswd:/var/www/.htpasswd
+      - ./users.txt:/users.txt
+    environment:
+      - USERS_FILE=/users.txt
+
+  knocker:
+    build:
+      context: ./knocker
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./knocker/scripts:/etc/labean/scripts
+      - ./knocker/labean.conf:/etc/labean/labean.conf
+
+  openconnect:
+    build:
+      context: ./openconnect
+    ports:
+      - "4443:443"
+    privileged: true
+    volumes:
+      - ./users.txt:/etc/ocserv/users.txt
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
+    env_file:
+      - ./shared.env
+
+  sstp:
+    build:
+      context: ./sstp
+    ports:
+      - "3443:443"
+    privileged: true
+    volumes:
+      - ./users.txt:/usr/local/vpnserver/users.txt
+    env_file:
+      - ./shared.env
