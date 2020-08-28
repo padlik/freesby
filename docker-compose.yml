@@ -28,7 +28,7 @@ services:
     privileged: true
     network_mode: host
     volumes:
-      - ./knocker/scrips/:/etc/labean/scripts
+      - ./knocker/scripts:/etc/labean/scripts
       - ./knocker/labean.conf:/etc/labean/labean.conf
 
   openconnect:
