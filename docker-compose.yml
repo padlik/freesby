@@ -50,6 +50,7 @@ services:
       - "3443:443"
     privileged: true
     volumes:
+      - ./certbot/etc/letsencrypt:/etc/letsencrypt
       - ./users.txt:/usr/local/vpnserver/users.txt
     env_file:
       - ./shared.env
