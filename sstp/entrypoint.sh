@@ -19,7 +19,7 @@ sed -i 's/\(\s*bool\s*DisableDosProction\s\).*$/\1true/' /usr/local/vpnserver/vp
 if [ -r /etc/letsencrypt/live/${NGINX_HOST}/cert.pem ]; then
 	openssl x509 -outform der -in /etc/letsencrypt/live/${NGINX_HOST}/fullchain.pem -out /usr/local/vpnserver/server_cert.crt
 	cp /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem /usr/local/vpnserver/server_key.pem
-	/usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerCertSet /LOADCERT:/usr/local/vpnserver/server_cert.crt LOADKEY:/usr/local/vpnserver/server_key.pem
+	/usr/local/vpnserver/vpncmd /SERVER localhost /CMD ServerCertSet /LOADCERT:/usr/local/vpnserver/server_cert.crt /LOADKEY:/usr/local/vpnserver/server_key.pem
 fi
 
 
