@@ -6,8 +6,8 @@ NGINX_HOST=${NGINX_HOST:-example.com}
 
 if [ ! -d  /etc/letsencrypt/live/${NGINX_HOST} ]; then
         mkdir -p /etc/letsencrypt/live/${NGINX_HOST}
-        cp /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/letsencrypt/live/${NGINX_HOST}
-        cp /etc/ssl/certs/ssl-cert-snakeoil.key /etc/letsencrypt/live/${NGINX_HOST}
+        cp /etc/ssl/certs/ssl-cert-snakeoil.pem /etc/letsencrypt/live/${NGINX_HOST}/privkey.pem
+        cp /etc/ssl/certs/ssl-cert-snakeoil.key /etc/letsencrypt/live/${NGINX_HOST}/cert.pem
 fi
 
 
