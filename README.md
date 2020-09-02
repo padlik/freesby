@@ -116,6 +116,17 @@ __Connection__:
 $ sudo /usr/local/sbin/sstpc  --log-stderr --cert-warn --user [usernsame]  --password [password] [vpnhostname] usepeerdns require-mschap-v2 noauth noipdefault defaultroute refuse-eap noccp
 ```
 
+## Advanced tasks
+Installation cleaning:
+```shell
+$ docker rmi $(docker images --filter=reference='freesby*' -q)
+$ rm -fr freesby
+```
 
+images rebuilding:
+```shell
+$ docker rmi $(docker images --filter=reference='freesby*' -q)
+$ cd ./freesby && docker-compose build
+```
 
 
