@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "About to generate certificates"
 pushd ./certbot
 echo "Starting acme challenge server"
