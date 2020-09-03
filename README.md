@@ -38,10 +38,10 @@ Docker and docker-compose can be installed either by choosing droplets with dock
 
 Primary or additional DNS name for the installation can be registered with any free DDNS provider (dynu, noip and etc). 
 
-### Installation Preparing
+### Preparing   
 Clone github repository:
 ```shell
-$ git clone --depth=1 https://github.com/padlik/freesby.git
+~ $ git clone --depth=1 https://github.com/padlik/freesby.git
 ```
 
 Edit __shared.env__ file and replace variables:
@@ -53,5 +53,80 @@ CERT_TYPE  | letsencrypt |  "selfsigned" to generate self-signed certificate (no
 
 
 ### Certificates generation
-Certificates can be either obtained from Letsencrypt service (recommended) or self-generated.  
+Certificates can be either obtained from Letsencrypt service (recommended) or self-generated.
+```shell
+~$ cd freesby
+~/freesby $ sudo ./certgen.sh
+```
+Please note that in case of self-signed certificate option script will generates new certificate even script run. For Letsencrypt certificates script will NOT re-generate certificates if they are not expired.
+
+### VPN Accounts
+VPN services will use own set of accounts different from the system ones. Default accounts and passwords can be found in __users.txt__ file. At least one account should be preset in this file for normal operations.    
+
+### Running VPN services
+Once certificates are obtained (or generated) and VPN accounts are available, VPN services can be started:
+
+```shell
+$ sudo ./start_vpn.sh
+```
+Please note that first start might take some time to build docker images. Depending on connection speed it will take up to 10 minutes. 
+
+To stop VPN services simply run:
+```shell
+$ sudo ./stop_vpn.sh
+```
+All Letsencrypt certificates will remain in place and won't be removed. 
+
+## Connecting clients
+As soon as solution provides two types of VPN services it can be connected from any device supporting SSTP or "Cisco Any Connect" protocols. Please refer summary table below:
+OS System  | Open Connect | SSTP 
+------------- | ------------- | ------------ |
+Linux  | yes | yes
+Windows  | yes | yes (build in)
+macOS  | yes |  yes 
+iOS | yes | no 
+Android| yes | yes
+
+### MacOS
+#### Openconnect:
+__Installation__
+```shell
+$ brew install openconnect 
+```
+and optional GUI client
+```shell
+$ brew install openconnect_gui
+```
+__Connection__:
+1. Visit [https://"vpnsite"/freesby/vpn]() to enable Openconnect VPN endpoint for 30 seconds.
+2. From terminal run:
+```shell
+sudo openconnect -u [user_name_from_users.txt] --pfs "vpnsite"
+```
+#### SSTP:
+__Installation__
+```shell
+$ brew install sstp-client
+```
+__Connection__:
+1. Visit [https://"vpnsite"/freesby/sstp]() to enable SSTP VPN endpoint for 30 seconds.
+2. From terminal run:
+
+```shell
+$ sudo /usr/local/sbin/sstpc  --log-stderr --cert-warn --user [usernsame]  --password [password] [vpnhostname] usepeerdns require-mschap-v2 noauth noipdefault defaultroute refuse-eap noccp
+```
+
+## Advanced tasks
+Installation cleaning:
+```shell
+$ docker rmi $(docker images --filter=reference='freesby*' -q)
+$ rm -fr freesby
+```
+
+images rebuilding:
+```shell
+$ docker rmi $(docker images --filter=reference='freesby*' -q)
+$ cd ./freesby && docker-compose build
+```
+
 
