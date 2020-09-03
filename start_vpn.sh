@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Freesby (Free Society in Belarus) v 0.5"
+echo "======================================="
 echo "Starting vpn services"
 echo "Checking certificates..."
 ./certgen.sh && docker-compose up -d 
