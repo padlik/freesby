@@ -1,0 +1,149 @@
+<h1>
+<a id="user-content-ssl-vpn-servers-for-docker-compose" class="anchor" href="#ssl-vpn-servers-for-docker-compose" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SSL VPN servers for docker-compose</h1>
+<p>SSL-based VPN servers: <a href="https://ocserv.gitlab.io/www/index.html" rel="nofollow">ocserv</a> and <a href="https://www.softether.org/" rel="nofollow">softether</a> combined into composer package. Ready-to-use solution for quick VPN setup using DigitalOcean droplet or any other hosted environment.</p>
+<p>Unlike any other VPNs, SSL-based VPN can mask their traffic to ordinary HTTPS(TLS) communication and thus pass DPI firewalls.</p>
+<p>In addition, HTTPS port knocking allows to hide VPN endpoints under any ordinary web site, which can prevent blocking of VPN endpoint by checking endpoint content first and blocking it in case if site is not "real".</p>
+<h2>
+<a id="user-content-usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h2>
+<p>Setup "freesby" using any hosting provider abroad. Visit special URL (e.g. https://[sitename]/freesby/vpn) to "unlock" VPN endpoint for 30 seconds. Start your VPN client (SSTP or AnyConnect). Once 30 seconds passed, VPN connection will remain active, but VPN endpoint will be "hidden" exposing the ordinary web site to the web.</p>
+<p>VPN connection traffic will look the same as an ordinary TLS communication and any additional web site checks will show nothing, but a web page(s).</p>
+<p>Additional setup can be made for any other services like SSH, to hide it from being discovered.</p>
+<h2>
+<a id="user-content-setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h2>
+<p>This example is based on Ubuntu 16.04 and DigitalOcean droplet but can be extended to any other setup.</p>
+<h3>
+<a id="user-content-prerequisites" class="anchor" href="#prerequisites" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Prerequisites</h3>
+<ul>
+<li>Shell root access</li>
+<li>Ports 22 (optional), 443 and 80 should be enabled by a firewall</li>
+<li>iptables and git are installed</li>
+<li>docker and docker-compose are available</li>
+<li>DNS name registered for the installation public IP (recommended)</li>
+</ul>
+<p>DigitalOcean droplets are usually equipped with the shell access enabled using key-based or password-based logins so nothing should be done in that matter.</p>
+<p>UFW (and iptables) can be installed using APT. Please allow ports required using</p>
+<div class="highlight highlight-source-shell"><pre>$ sudo ufw allow 22/tcp
+$ sudo ufw allow 443/tcp
+$ sudo ufw allow 80/tcp</pre></div>
+<p>Please note, that no UDP ports are required to be opened (UDP traffic is typically blocked first to prevent VPN access).</p>
+<p>Docker and docker-compose can be installed either by choosing droplets with docker pre-installed either following the instructions for <a href="https://docs.docker.com/engine/install/ubuntu/" rel="nofollow">docker</a> and <a href="https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04" rel="nofollow">docker-composer</a>.</p>
+<p>Primary or additional DNS name for the installation can be registered with any free DDNS provider (dynu, noip and etc).</p>
+<h3>
+<a id="user-content-preparing" class="anchor" href="#preparing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Preparing</h3>
+<p>Clone github repository:</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">~</span> $ git clone --depth=1 https://github.com/padlik/freesby.git</pre></div>
+<p>Edit <strong>shared.env</strong> file and replace variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NGINX_HOST</td>
+<td>[installation dns hostname]</td>
+<td>required</td>
+</tr>
+<tr>
+<td>FREESBY_PREFIX</td>
+<td>freesby</td>
+<td>prefix for knocking service</td>
+</tr>
+<tr>
+<td>CERT_TYPE</td>
+<td>letsencrypt</td>
+<td>"selfsigned" to generate self-signed certificate (not recommended, optional)</td>
+</tr>
+</tbody>
+</table>
+<h3>
+<a id="user-content-certificates-generation" class="anchor" href="#certificates-generation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Certificates generation</h3>
+<p>Certificates can be either obtained from Letsencrypt service (recommended) or self-generated.</p>
+<div class="highlight highlight-source-shell"><pre><span class="pl-k">~</span>$ <span class="pl-c1">cd</span> freesby
+<span class="pl-k">~</span>/freesby $ sudo ./certgen.sh</pre></div>
+<p>Please note that in case of self-signed certificate option script will generates new certificate even script run. For Letsencrypt certificates script will NOT re-generate certificates if they are not expired.</p>
+<h3>
+<a id="user-content-vpn-accounts" class="anchor" href="#vpn-accounts" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>VPN Accounts</h3>
+<p>VPN services will use own set of accounts different from the system ones. Default accounts and passwords can be found in <strong>users.txt</strong> file. At least one account should be preset in this file for normal operations.</p>
+<h3>
+<a id="user-content-running-vpn-services" class="anchor" href="#running-vpn-services" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running VPN services</h3>
+<p>Once certificates are obtained (or generated) and VPN accounts are available, VPN services can be started:</p>
+<div class="highlight highlight-source-shell"><pre>$ sudo ./start_vpn.sh</pre></div>
+<p>Please note that first start might take some time to build docker images. Depending on connection speed it will take up to 10 minutes.</p>
+<p>To stop VPN services simply run:</p>
+<div class="highlight highlight-source-shell"><pre>$ sudo ./stop_vpn.sh</pre></div>
+<p>All Letsencrypt certificates will remain in place and won't be removed.</p>
+<h2>
+<a id="user-content-connecting-clients" class="anchor" href="#connecting-clients" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Connecting clients</h2>
+<p>As soon as solution provides two types of VPN services it can be connected from any device supporting SSTP or "Cisco Any Connect" protocols. Please refer summary table below:</p>
+<table>
+<thead>
+<tr>
+<th>OS System</th>
+<th>Open Connect</th>
+<th>SSTP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>yes</td>
+<td>yes (build in)</td>
+</tr>
+<tr>
+<td>macOS</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>iOS</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr>
+<td>Android</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<h3>
+<a id="user-content-macos" class="anchor" href="#macos" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>MacOS</h3>
+<h4>
+<a id="user-content-openconnect" class="anchor" href="#openconnect" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Openconnect:</h4>
+<p><strong>Installation</strong></p>
+<div class="highlight highlight-source-shell"><pre>$ brew install openconnect </pre></div>
+<p>and optional GUI client</p>
+<div class="highlight highlight-source-shell"><pre>$ brew install openconnect_gui</pre></div>
+<p><strong>Connection</strong>:</p>
+<ol>
+<li>Visit <a href="">https://"vpnsite"/freesby/vpn</a> to enable Openconnect VPN endpoint for 30 seconds.</li>
+<li>From terminal run:</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre>sudo openconnect -u [user_name_from_users.txt] --pfs <span class="pl-s"><span class="pl-pds">"</span>vpnsite<span class="pl-pds">"</span></span></pre></div>
+<h4>
+<a id="user-content-sstp" class="anchor" href="#sstp" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>SSTP:</h4>
+<p><strong>Installation</strong></p>
+<div class="highlight highlight-source-shell"><pre>$ brew install sstp-client</pre></div>
+<p><strong>Connection</strong>:</p>
+<ol>
+<li>Visit <a href="">https://"vpnsite"/freesby/sstp</a> to enable SSTP VPN endpoint for 30 seconds.</li>
+<li>From terminal run:</li>
+</ol>
+<div class="highlight highlight-source-shell"><pre>$ sudo /usr/local/sbin/sstpc  --log-stderr --cert-warn --user [usernsame]  --password [password] [vpnhostname] usepeerdns require-mschap-v2 noauth noipdefault defaultroute refuse-eap noccp</pre></div>
+<h2>
+<a id="user-content-advanced-tasks" class="anchor" href="#advanced-tasks" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Advanced tasks</h2>
+<p>Installation cleaning:</p>
+<div class="highlight highlight-source-shell"><pre>$ docker rmi <span class="pl-s"><span class="pl-pds">$(</span>docker images --filter=reference=<span class="pl-s"><span class="pl-pds">'</span>freesby*<span class="pl-pds">'</span></span> -q<span class="pl-pds">)</span></span>
+$ rm -fr freesby</pre></div>
+<p>images rebuilding:</p>
+<div class="highlight highlight-source-shell"><pre>$ docker rmi <span class="pl-s"><span class="pl-pds">$(</span>docker images --filter=reference=<span class="pl-s"><span class="pl-pds">'</span>freesby*<span class="pl-pds">'</span></span> -q<span class="pl-pds">)</span></span>
+$ <span class="pl-c1">cd</span> ./freesby <span class="pl-k">&amp;&amp;</span> docker-compose build</pre></div>
