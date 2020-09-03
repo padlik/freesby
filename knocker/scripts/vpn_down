@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#usage $0 client_ip docker_vpn_port 
+client_ip=$1
+vpn_port=$2
+
+#Allow port for forwarding
+iptables -D INPUT -p tcp -s ${client_ip}  --dport ${vpn_port} -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+iptables -D OUTPUT -p tcp --sport ${vpn_port} -m conntrack --ctstate ESTABLISHED -j ACCEPT
+
+#forwarding port
+iptables -t nat -D PREROUTING -p tcp -s ${client_ip} --dport 443 -j REDIRECT --to-port ${vpn_port}

@@ -1,0 +1,15 @@
+FROM golang:alpine as gobuilder
+WORKDIR $GOPATH/src/github.com/uprt/
+RUN apk --update add git \
+    && rm -rf /var/cache!/apk/*
+RUN git clone --depth=1 https://github.com/uprt/labean
+RUN go install github.com/uprt/labean
+
+FROM alpine:latest
+ENV LABEAN_CONF=/etc/labean/labean.conf
+RUN apk --update add  iptables bash \
+    && rm -rf /var/cache!/apk/*
+COPY --from=gobuilder /go/bin/labean /usr/sbin/labean
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+EXPOSE 8080
+CMD [ "/usr/local/bin/entrypoint.sh" ]

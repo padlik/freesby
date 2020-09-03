@@ -1,0 +1,9 @@
+leo_tolstoy War_And_Piece
+anton_chekhov Cherry_Orchard
+fedor_Dostoevsky The_Idiot
+mikhail_bulgakov The_Master_and_Margarita
+boris_pasternak Doktor_Jivago
+vladimir_nabokov Lolita
+alexander_pushkin Eugene_Onegin
+venedikt_yerofeyev Moscow-Petushki
+andrei_platonov The_Foundation_Pit
