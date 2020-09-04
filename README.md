@@ -34,7 +34,7 @@ $ sudo ufw allow 80/tcp
 ```
 Please note, that no UDP ports are required to be opened (UDP traffic is typically blocked first to prevent VPN access). 
 
-Docker and docker-compose can be installed either by choosing droplets with docker pre-installed either following the instructions for [docker](https://docs.docker.com/engine/install/ubuntu/) and [docker-composer](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04).
+Docker and docker-compose can be installed either by choosing droplets with docker pre-installed either following the instructions for [docker](https://docs.docker.com/engine/install/ubuntu/) and [docker-composer](https://docs.docker.com/compose/install/).
 
 Primary or additional DNS name for the installation can be registered with any free DDNS provider (dynu, noip and etc). 
 
