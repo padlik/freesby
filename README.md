@@ -1,9 +1,10 @@
 # SSL VPN servers for docker-compose 
 SSL-based VPN servers: [ocserv](https://ocserv.gitlab.io/www/index.html) and [softether](https://www.softether.org/) combined into composer package. Ready-to-use solution for quick VPN setup using DigitalOcean droplet or any other hosted environment.
 
-Unlike any other VPNs, SSL-based VPN can mask their traffic to ordinary HTTPS(TLS) communication and thus pass DPI firewalls.
+SSL-based VPN masks traffic as ordinary HTTPS(TLS) communication so it can pass DPI firewalls.
 
-In addition, HTTPS port knocking allows to hide VPN endpoints under any ordinary web site, which can prevent blocking of VPN endpoint by checking endpoint content first and blocking it in case if site is not "real".   
+HTTPS "url knocking" allows to hide VPN endpoints under any ordinary web site, which can prevent blocking of VPN endpoint by preventive web site checking for being 
+"real" (e.g.provide auth content on the fornt page). 
 
 ## Usage
 
