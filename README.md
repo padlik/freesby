@@ -4,7 +4,7 @@ SSL-based VPN servers: [ocserv](https://ocserv.gitlab.io/www/index.html) and [so
 SSL-based VPN masks traffic as ordinary HTTPS(TLS) communication so it can pass DPI firewalls.
 
 HTTPS "url knocking" allows to hide VPN endpoints under any ordinary web site, which can prevent blocking of VPN endpoint by preventive web site checking for being 
-"real" (e.g.provide auth content on the fornt page). 
+"real" (e.g.provide auth content on the fornt page). Thanks to [labean](https://github.com/uprt/labean)  
 
 ## Usage
 
