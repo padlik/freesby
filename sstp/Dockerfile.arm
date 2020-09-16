@@ -1,0 +1,22 @@
+FROM ubuntu:bionic
+
+ENV USERS_LIST=/usr/local/vpnserver/users.txt
+
+RUN apt-get update && \
+    apt-get -y install software-properties-common && \
+    add-apt-repository -y ppa:paskal-07/softethervpn && \
+    apt-get update && \
+    apt-get -y install softether-vpnserver && \
+    ln -s /usr/libexec/softether/vpnserver /usr/local/vpnserver && \
+    ln -s /usr/bin/vpncmd /usr/local/vpnserver/vpncmd
+
+ENV SERVERPASS FreeProxy4All
+ENV HUBNAME basehub
+ENV HUBPASS pass4hub
+
+
+ADD entrypoint.sh /usr/local/bin/entrypoint.sh
+
+EXPOSE 443
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
