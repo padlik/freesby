@@ -54,3 +54,13 @@ services:
       - ./users.txt:/usr/local/vpnserver/users.txt
     env_file:
       - ./shared.env
+
+  ss:
+    image: shadowsocks/shadowsocks-libev
+    environment:
+      PASSWORD=shadow4me
+      METHOD=aes-256-gcm
+    ports:
+      - "8388:8388"
+
+
